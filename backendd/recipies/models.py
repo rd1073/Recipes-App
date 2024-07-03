@@ -13,6 +13,8 @@ class Recipe(models.Model):
     ingredients = models.TextField()
     instructions = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='recipes')
+    image = models.ImageField(upload_to='recipes/', null=True, blank=True)  # New field for image
+
 
     def __str__(self):
         return self.title

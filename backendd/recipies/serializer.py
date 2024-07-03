@@ -12,4 +12,5 @@ class CategorySerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['id', 'title', 'ingredients', 'instructions', 'category', 'image']

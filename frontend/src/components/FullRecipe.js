@@ -20,10 +20,12 @@ const FullRecipe = () => {
         return <div>Loading...</div>;
       }
 
+      const baseUrl = 'http://127.0.0.1:8000/';  // Change to your backend URL
+
 
       return (
         <div className="max-w-4xl mx-auto p-4">
-          <img className="w-full h-64 object-cover mb-4" src={recipe.image} alt={recipe.title} />
+          <img className="w-full h-64 object-cover mb-4" src={`${baseUrl}${recipe.image}`} alt={recipe.title} />
           <h1 className="text-4xl font-bold mb-4">{recipe.title}</h1>
           <h2 className="text-2xl font-semibold mb-2">Ingredients</h2>
           <p className="mb-4">{recipe.ingredients}</p>
