@@ -30,6 +30,20 @@ const UpdateRecipe = () => {
         });
         
 }, [id]);
+
+
+const handleDelete = (e) => {
+    e.preventDefault();
+
+    axios.delete(`http://localhost:8000/recipes/${id}/`)
+      .then(response => {
+        console.log('Recipe deleted successfully:', response.data);
+        navigate('/'); // Redirect to home or any desired route after deletion
+      })
+      .catch(error => console.error('Error deleting recipe:', error));
+    }
+
+
  
    const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,6 +133,14 @@ const UpdateRecipe = () => {
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Update
+      </button>
+      <br />
+      <br />
+      <button
+        onClick={handleDelete}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Delete
       </button>
     </form>
     </div>
