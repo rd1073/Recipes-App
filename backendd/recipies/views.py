@@ -6,6 +6,7 @@ from django.http.response import JsonResponse
 from .models import Recipe, Category
 from .serializer import RecipeSerializer, CategorySerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Q
 
 
 class RecipeView(APIView):
@@ -85,3 +86,12 @@ class RecipesByCategoryView(APIView):
         except Category.DoesNotExist:
             raise Http404("Category not found")
 
+class RecipeSearchView(APIView):
+    def get(self, request, format=None):
+        search_query = request.GET.get('search', None)
+        if search_query:
+            recipes = Recipe.objects.filter(Q(title__icontains=search_query))
+        else:
+            recipes = Recipe.objects.all()
+        serializer = RecipeSerializer(recipes, many=True)
+        return Response(serializer.data)

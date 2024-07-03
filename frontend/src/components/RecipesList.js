@@ -11,6 +11,8 @@ const RecipeList = () => {
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   useEffect(() => {
     axios.get('http://localhost:8000/categories/')
@@ -37,6 +39,12 @@ const RecipeList = () => {
     setSelectedCategory(e.target.value);
   };
 
+  const handleSearch = () => {
+    axios.get(`http://localhost:8000/recipes/search/?search=${searchQuery}`)
+      .then(response => setFilteredRecipes(response.data))
+      .catch(error => console.error('Error fetching search results:', error));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate(`/add-recipe`);
@@ -47,8 +55,21 @@ const RecipeList = () => {
       <Hero />
       <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('https://wallpapercave.com/wp/wp7224590.jpg')` }}>
         <div className="container mx-auto px-4 py-8">
-          <h2 className="text-3xl font-bold text-center mb-8">Filter Recipes by Category</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Recipes</h2>
           <div className="flex justify-center mb-8">
+          <input
+              type="text"
+              className="p-2 rounded-lg border border-gray-300"
+              placeholder="Search by title"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button
+              onClick={handleSearch}
+              className="ml-2 p-2 bg-blue-700 text-white rounded-lg"
+            >
+              Search
+            </button>
             <select
               className="p-2 rounded-lg border border-gray-300"
               onChange={handleCategoryChange}
@@ -60,8 +81,7 @@ const RecipeList = () => {
               ))}
             </select>
           </div>
-          <h2 className="text-3xl font-bold text-center mb-8">Our Blog</h2>
-          <div className="flex flex-wrap justify-center">
+           <div className="flex flex-wrap justify-center">
             {filteredRecipes.map((rec, index) => (
               <Card key={index} id={rec.id} title={rec.title} image={rec.image} />
             ))}
