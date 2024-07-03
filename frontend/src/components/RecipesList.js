@@ -9,6 +9,11 @@ import { useNavigate } from 'react-router-dom';
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
     const navigate = useNavigate();
+    const [categories, setCategories] = useState([]);
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -18,12 +23,24 @@ const RecipeList = () => {
 
     };
   useEffect(() => {
+    axios.get('http://localhost:8000/categories/')
+    .then(response => setCategories(response.data))
+    .catch(error => console.error('Error fetching categories:', error));
+
+
     axios.get('http://localhost:8000/recipes/')
       .then(response => setRecipes(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-
+useEffect(() => {
+        // Filter recipes based on selected category
+        if (selectedCategory) {
+            setFilteredRecipes(recipes.filter(recipe => recipe.category === selectedCategory));
+        } else {
+            setFilteredRecipes(recipes);
+        }
+    }, [selectedCategory, recipes]);
   
   
   

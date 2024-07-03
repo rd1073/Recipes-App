@@ -50,6 +50,9 @@ class RecipeView(APIView):
         recipe.delete()
         return JsonResponse("Recipe Deleted Successfully", safe=False)
     
+
+    
+    
     
 class CategoryView(APIView):
     def post(self, request, format=None):
@@ -70,3 +73,15 @@ class CategoryView(APIView):
         return Response(serializer.data)
 
 # Create your views here.
+
+
+class RecipesByCategoryView(APIView):
+    def get(self, request, category_id, format=None):
+        try:
+            category = Category.objects.get(pk=category_id)
+            recipes = Recipe.objects.filter(category=category)
+            serializer = RecipeSerializer(recipes, many=True)
+            return Response(serializer.data)
+        except Category.DoesNotExist:
+            raise Http404("Category not found")
+
