@@ -4,6 +4,8 @@ import Card from './Card';
 import Hero from './Hero';
 import { IoIosAddCircle } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import { CiSearch } from "react-icons/ci";
+
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
@@ -56,22 +58,23 @@ const RecipeList = () => {
       <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('https://wallpapercave.com/wp/wp7224590.jpg')` }}>
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-3xl font-bold text-center mb-8">Recipes</h2>
-          <div className="flex justify-center mb-8">
-          <input
+          <div className="flex flex-col items-center justify-center space-y-4 mb-8 sm:flex-row sm:space-y-0 sm:space-x-4">
+            <input
               type="text"
-              className="p-2 rounded-lg border border-gray-300"
+              className="p-2 rounded-lg border border-gray-300 w-full sm:w-auto"
               placeholder="Search by title"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button
               onClick={handleSearch}
-              className="ml-2 p-2 bg-blue-700 text-white rounded-lg"
+              className="p-2 bg-blue-700 text-white rounded-lg w-full sm:w-auto"
             >
-              Search
+              <CiSearch />
+
             </button>
             <select
-              className="p-2 rounded-lg border border-gray-300"
+              className="p-2 rounded-lg border border-gray-300 w-full sm:w-auto"
               onChange={handleCategoryChange}
               value={selectedCategory}
             >
