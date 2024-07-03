@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'recipeapp', #change it databasename
         'USER': 'postgres', #change it database user name
-        'PASSWORD': 'golobull', # change user database password
+        'PASSWORD': '*', # change user database password
         'HOST': 'localhost',  
         'PORT': '5432',           
     }
