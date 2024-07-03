@@ -4,17 +4,21 @@ import RecipeList from './components/RecipesList';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import RecipeForm from './components/RecipeForm';
 import Hero from './components/Hero';
+import FullRecipe from './components/FullRecipe';
 
 function App() {
   return (
     <Router>
        <div className="App">
-        <Hero />
-          
+           
 
         <Routes>
           <Route path="/" element={<RecipeList/>} />
           <Route path="/add-recipe" element={<RecipeForm/>} />
+          <Route path="/full-recipe/:id" element={<FullRecipe/>} />
+
+          
+
 
           
            

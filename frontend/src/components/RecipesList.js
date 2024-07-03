@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Card from './Card';
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
@@ -13,31 +14,14 @@ const RecipeList = () => {
   
 
   return (
-    <div>
-        <table>
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Ingridients</th>
-            <th>Instructions</th>
-            <th>Category</th>
-             </tr>
-        </thead>
-        <tbody>
-            {recipes.map((rec) =>
-            <tr key={rec.id}>
-                <td>{rec.title}</td>
-                <td>{rec.ingredients}</td>
-                <td>{rec.instructions}</td>
-                <td>{rec.category}</td>
-                
-            </tr>)}
-        </tbody>
-    </table>
-      
-       
+    <div className="container mx-auto px-4 py-8">
+    <h2 className="text-3xl font-bold text-center mb-8">Our Blog</h2>
+    <div className="flex flex-wrap justify-center">
+        {recipes.map((rec, index) => (
+            <Card key={index} id={rec.id} title={rec.title} image={rec.image} />
+        ))}
     </div>
+</div>
   );
 };
 
