@@ -11,13 +11,13 @@ const Card = ({ id, title, image }) => {
 
 
   return (
-    <div className="max-w-sm w-full h-80 rounded overflow-hidden shadow-lg m-4 flex flex-col"
+    <div className="max-w-sm w-full h-80 rounded overflow-hidden shadow-lg m-4 flex flex-col bg-white"
     onClick={handleClick}>
       <div className="h-48 overflow-hidden">
         <img className="w-full h-full object-cover" src={`${baseUrl}${image}`} alt={title} />
       </div>
       <div className="flex-1 flex flex-col justify-center px-6 py-4">
-        <div className="font-bold text-xl mb-2">{id} {title}</div>
+        <div className="font-bold text-xl mb-2">{title}</div>
       </div>
     </div>
   );

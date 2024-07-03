@@ -1,48 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 
-const AddRecipe = () => {
+
+
+const UpdateRecipe = () => {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [category, setCategory] = useState('');
-  const [image, setImage] = useState(null);
-  const [categories, setCategories] = useState([]);
+   const [image, setImage] = useState(null);
+   const { id } = useParams();
+   const [initialRecipe, setInitialRecipe] = useState({});
 
-  useEffect(() => {
-    axios.get('http://localhost:8000/categories/')
-      .then(response => setCategories(response.data))
-      .catch(error => console.error('Error fetching categories:', error));
-  }, []);
-
-  const handleSubmit = (e) => {
+ 
+   useEffect(() => {
+    // Fetch the existing recipe details
+    axios.get(`http://localhost:8000/recipes/${id}/`)
+        .then(response => {
+            const recipe = response.data;
+            setInitialRecipe(recipe);
+            setTitle(recipe.title);
+            setIngredients(recipe.ingredients);
+            setInstructions(recipe.instructions);
+             setImage(recipe.image); // If you want to show the existing image
+        });
+        
+}, [id]);
+ 
+   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Create a new FormData object to handle file upload
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('ingredients', ingredients);
-    formData.append('instructions', instructions);
-    formData.append('category', category);
-    formData.append('image', image);
+    if (title) formData.append('title', title);
+    if (ingredients) formData.append('ingredients', ingredients);
+    if (instructions) formData.append('instructions', instructions);
+     if (image) {
+        formData.append('image', image);
+    } else {
+        formData.append('image', image);
+    } 
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
-    axios.post('http://localhost:8000/recipes/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+    axios.put(`http://127.0.0.1:8000/recipes/${id}/`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+          
     })
-      .then(response => {
-        console.log('Recipe added successfully:', response.data);
-        // Optionally, reset the form or perform additional actions
+    .then(response => {
+        console.log('Recipe updated:', response.data);
+        navigate(`/full-recipe/${id}`);
       })
-      .catch(error => console.error('Error adding recipe:', error));
-      navigate(`/`);
+        .catch(error => console.log(error));
+};
 
-
-  };
 
   return (
     <div className=" bg-cover bg-center" style={{ backgroundImage: `url('https://i.etsystatic.com/37444368/r/il/ba6eda/4490987468/il_570xN.4490987468_g50i.jpg')`, 
@@ -59,7 +77,7 @@ const AddRecipe = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
+          
         />
       </div>
       <div className="mb-4">
@@ -71,7 +89,7 @@ const AddRecipe = () => {
           value={ingredients}
           onChange={(e) => setIngredients(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
+          
         />
       </div>
       <div className="mb-4">
@@ -83,26 +101,10 @@ const AddRecipe = () => {
           value={instructions}
           onChange={(e) => setInstructions(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
+          
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
-          Category
-        </label>
-        <select
-          id="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          required
-        >
-          <option value="">Select Category</option>
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
-          ))}
-        </select>
-      </div>
+       
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
           Image
@@ -118,7 +120,7 @@ const AddRecipe = () => {
         type="submit"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
-        Add Recipe
+        Update
       </button>
     </form>
     </div>
@@ -126,4 +128,4 @@ const AddRecipe = () => {
   );
 };
 
-export default AddRecipe;
+export default UpdateRecipe;

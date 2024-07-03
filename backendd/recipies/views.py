@@ -5,9 +5,13 @@ from rest_framework.response import Response
 from django.http.response import JsonResponse
 from .models import Recipe, Category
 from .serializer import RecipeSerializer, CategorySerializer
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class RecipeView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+
     def post(self, request, format=None):
         data = request.data
         serializer = RecipeSerializer(data=data)
@@ -30,7 +34,8 @@ class RecipeView(APIView):
             return Recipe.objects.get(pk=pk)
         except Recipe.DoesNotExist:
             raise Http404
-        
+   
+
     def put(self, request, pk, format=None):
         recipe = self.get_object(pk)
         data = request.data
@@ -38,8 +43,8 @@ class RecipeView(APIView):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse("Recipe Updated Successfully", safe=False)
-        return JsonResponse("Failed to Update Recipe", safe=False)
-    
+        return JsonResponse({"error": "Failed to Update Recipe", "details": serializer.errors}, safe=False)
+
     def delete(self, request, pk, format=None):
         recipe = self.get_object(pk)
         recipe.delete()
