@@ -39,11 +39,9 @@ const UpdateRecipe = () => {
     if (title) formData.append('title', title);
     if (ingredients) formData.append('ingredients', ingredients);
     if (instructions) formData.append('instructions', instructions);
-     if (image) {
+    if (image instanceof File) {
         formData.append('image', image);
-    } else {
-        formData.append('image', image);
-    } 
+      }
     for (let [key, value] of formData.entries()) {
         console.log(key, value);
     }
